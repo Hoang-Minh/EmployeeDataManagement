@@ -12,11 +12,11 @@ $(document).ready(function(){
     firebase.initializeApp(config);
 
     var database = firebase.database();
-    
+    database.ref().on("value", displayData, getError)
 
-    database.ref().on("value", function(snap){      
-        $("#employee").empty();
-        
+    function displayData(snap){
+
+        $("#employee").empty();        
         var values = snap.val();
         if(!$.isEmptyObject(values))
         {
@@ -47,10 +47,12 @@ $(document).ready(function(){
                 $("#employee").append(employeeData);
             }
         }
-        
-    }, function(error){
+
+    }
+
+    function getError(error){
         console.log(error);
-    })   
+    }
     
     // database.ref().orderByChild("dataAdded").limitToLast(1).on("child_added", function(snap){
         
