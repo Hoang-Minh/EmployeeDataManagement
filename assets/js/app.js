@@ -27,21 +27,37 @@ $(document).ready(function(){
                 var k = keys[i];
                 var name = values[k].name;
                 var role = values[k].role;
-                var startDate = values[k].startYear;
+                //var startDate = values[k].startDate;
                 var rate = values[k].rate;
+
+
+                var startDate = moment(values[k].startDate, "DD/MM/YY").format("X");
+
+                //var startDate = moment($("#startDate").val().trim(), "DD/MM/YY").format("X");
+                var empStartPretty = moment.unix(startDate).format("MM/DD/YY");
+                console.log("empStartPretty: " + empStartPretty);
+                var empMonths = moment().diff(moment.unix(startDate, "X"), "months");
+                console.log("Emp Months: " + empMonths);
+
+                var totalBilled = rate * empMonths;
+
+
+                //
 
                 console.log(name);
                 console.log(role);
-                console.log(startDate);
+                console.log(empStartPretty);
                 console.log(rate);
 
                 var employeeData = "<tr>";
                 employeeData += "<td>" + name + "</td>";
                 employeeData += "<td>" + role + "</td>";
-                employeeData += "<td>" + startDate + "</td>";
-                employeeData += "<td></td>";
+                employeeData += "<td>" + empStartPretty + "</td>";
+
+                
+                employeeData += "<td>" + empMonths + "</td>";
                 employeeData += "<td>" + rate + "</td>";
-                employeeData += "<td></td>";
+                employeeData += "<td>" + totalBilled + "</td>";
                 employeeData += "</tr>";
 
                 $("#employee").append(employeeData);
@@ -59,19 +75,19 @@ $(document).ready(function(){
     // })
 
     $(document).on("click", "#addToDatabase", function(event){
-          event.preventDefault();
-          var employeeName = $("#name").val().trim();
-          var employeeRole = $("#role").val().trim();
-          var startYear = $("#startDate").val().trim();
-          var monthlyRate = $("#monthly-rate").val().trim();
+        event.preventDefault();
+        var employeeName = $("#name").val().trim();
+        var employeeRole = $("#role").val().trim();        
+        var startDate = $("#startDate").val().trim();        
+        var monthlyRate = $("#monthly-rate").val().trim();        
 
-          database.ref().push({
-              name : employeeName,
-              role : employeeRole,
-              startYear : startYear,
-              rate : monthlyRate,
-              dataAdded: firebase.database.ServerValue.TIMESTAMP
-          });
+        database.ref().push({
+            name : employeeName,
+            role : employeeRole,
+            startDate : startDate,
+            rate : monthlyRate,
+            dataAdded: firebase.database.ServerValue.TIMESTAMP
+        });
     });
     
     
